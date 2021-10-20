@@ -1,0 +1,59 @@
+@use '~@angular/material' as mat;
+@import './colors';
+@import './typography';
+
+
+$primary: mat.define-palette($primary, default, lighter, darker);
+$accent: mat.define-palette($accent, default, lighter, darker);
+$warn: mat.define-palette($warn, default, lighter, darker);
+
+
+$mat-light-theme-background: (
+  background:               $light,
+  status-bar:               $light,
+  app-bar:                  $light,
+  hover:                    $dark,
+  card:                     $light,
+  dialog:                   $light,
+  tooltip:                  $dark,
+  disabled-button:          $dark,
+  raised-button:            $light-lighter-5,
+  focused-button:           $dark,
+  selected-button:          $light-darker-20,
+  selected-disabled-button: $light-darker-30,
+  disabled-button-toggle:   $light-darker-10,
+  unselected-chip:          $light-darker-10,
+  disabled-list-option:     $light-darker-10,
+);
+
+// Theme color for icons and texts
+$mat-light-theme-foreground: (
+  base:              $dark,
+  divider:           $dark,
+  dividers:          $dark,
+  disabled:          $dark,
+  disabled-button:   $dark,
+  disabled-text:     $dark,
+  elevation:         $dark,
+  hint-text:         $dark,
+  secondary-text:    $dark,
+  icon:              rgba(black, 0.54),
+  icons:             rgba(black, 0.54),
+  text:              rgba(black, 0.87),
+  slider-min:        rgba(black, 0.87),
+  slider-off:        rgba(black, 0.26),
+  slider-off-active: rgba(black, 0.38),
+);
+
+
+$theme: (
+  primary: $primary,
+  accent: $accent,
+  warn: $warn,
+  is-dark: false,
+  foreground: $mat-light-theme-foreground,
+  background: $mat-light-theme-background,
+);
+
+@include mat.core($typhography);
+@include mat.all-component-themes($theme);

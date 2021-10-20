@@ -1,0 +1,119 @@
+@use 'sass:map';
+@use '~@angular/material' as mat;
+
+
+$dark-text: rgba(black, 0.87);
+$light-text: rgba(white, 0.87);
+
+$dark: hsl(0, 0%, 27%);
+
+$light: hsl(0, 0%, 98%);
+$light-darker-5:   darken($light, 5%);
+$light-darker-10:  darken($light, 10%);
+$light-darker-20:  darken($light, 20%);
+$light-darker-30:  darken($light, 30%);
+$light-lighter-5:  lighten($light, 5%);
+
+
+$primary: (
+  50: hsl(223, 26%, 39%),
+  100: hsl(223, 26%, 36%),
+  200: hsl(223, 26%, 33%),
+  300: hsl(223, 26%, 30%),
+  400: hsl(223, 26%, 24%),
+  500: hsl(223, 26%, 21%),
+  600: hsl(223, 26%, 20%),
+  700: hsl(223, 26%, 18%),
+  800: hsl(223, 26%, 15%),
+  900: hsl(223, 26%, 13%),
+
+  lighter: hsl(223, 26%, 30%),
+  default: hsl(223, 26%, 21%),
+  darker: hsl(223, 26%, 18%),
+
+  contrast: (
+    50: $light-text,
+    100: $light-text,
+    200: $light-text,
+    300: $light-text,
+    400: $light-text,
+    500: $light-text,
+    600: $light-text,
+    700: $light-text,
+    800: $light-text,
+    900: $light-text,
+
+    default: $light-text,
+    lighter: $light-text,
+    darker: $light-text
+  )
+);
+
+
+$accent: (
+  50: hsl(203, 33%, 65%),
+  100: hsl(203, 33%, 60%),
+  200: hsl(203, 33%, 55%),
+  300: hsl(203, 33%, 50%),
+  400: hsl(203, 33%, 45%),
+  500: hsl(203, 33%, 40%),
+  600: hsl(203, 33%, 35%),
+  700: hsl(203, 33%, 30%),
+  800: hsl(203, 33%, 25%),
+  900: hsl(203, 33%, 20%),
+
+  lighter: hsl(202, 33%, 50%),
+  default: hsl(203, 33%, 40%),
+  darker: hsl(203, 33%, 30%),
+
+  contrast: (
+    50: $dark-text,
+    100: $dark-text,
+    200: $dark-text,
+    300: $dark-text,
+    400: $dark-text,
+    500: $light-text,
+    600: $light-text,
+    700: $light-text,
+    800: $light-text,
+    900: $light-text,
+    default: $light-text,
+    lighter: $dark-text,
+    darker: $light-text
+  )
+);
+
+
+$warn: (
+  50: hsl(2,93%,90%),
+  100: hsl(2,93%,85%),
+  200: hsl(2,93%,80%),
+  300: hsl(2,93%,75%),
+  400: hsl(2,93%,70%),
+  500: hsl(2,93%,60%),
+  600: hsl(2,93%,55%),
+  700: hsl(2,93%,50%),
+  800: hsl(2,93%,45%),
+  900: hsl(2,93%,40%),
+
+  lighter: hsl(2,93%,75%),
+  default: hsl(2,93%,60%),
+  darker: hsl(2,93%,50%),
+
+  contrast: (
+    50: $dark-text,
+    100: $dark-text,
+    200: $dark-text,
+    300: $dark-text,
+    400: $light-text,
+    500: $light-text,
+    600: $light-text,
+    700: $light-text,
+    800: $light-text,
+    900: $light-text,
+
+    lighter: $dark-text,
+    default: $light-text,
+    darker: $light-text
+  )
+);

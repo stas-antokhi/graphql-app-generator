@@ -1,6 +1,6 @@
 {
   "name": "grapgql-app-creator",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -11,10 +11,12 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "~12.1.1",
+    "@angular/cdk": "^12.2.10",
     "@angular/common": "~12.1.1",
     "@angular/compiler": "~12.1.1",
     "@angular/core": "~12.1.1",
     "@angular/forms": "~12.1.1",
+    "@angular/material": "^12.2.10",
     "@angular/platform-browser": "~12.1.1",
     "@angular/platform-browser-dynamic": "~12.1.1",
     "@angular/router": "~12.1.1",
@@ -28,12 +30,15 @@
     "@angular/compiler-cli": "~12.1.1",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
+    "autoprefixer": "^10.3.7",
     "jasmine-core": "~3.7.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "postcss-cli": "^9.0.1",
+    "tailwindcss": "^2.2.17",
     "typescript": "~4.3.2"
   }
 }
