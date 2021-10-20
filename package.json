@@ -1,5 +1,5 @@
 {
-  "name": "grapgql-app-creator",
+  "name": "grapgql-app-generator",
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
