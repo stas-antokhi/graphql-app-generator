@@ -1,28 +1,36 @@
-<div class="container mx-auto px-8 md:px-0">
-  <p class="pt-6 font-bold tracking-wide text-2xl">Hello world</p>
+<mat-toolbar color="primary">
+    <div class="container mx-auto flex">
 
-  <div class="my-6">
-    <button color="primary" mat-raised-button>Ciao</button>
-    <button color="accent" mat-raised-button>Ciao</button>
-    <button color="warn" mat-raised-button>Ciao</button>
-    <button class="bg-accent-500 text-black px-3 py-2 rounded shadow mx-2">Tailwind</button>
-    <h1 class="font-secondary my-6">Header</h1>
-  </div>
+      <p class="pb-0 mb-0"> {{ title }} </p>
 
-  <h1>Header 1</h1>
-  <h2>Header 2</h2>
-  <h3>Header 3</h3>
-  <h4>Header 4</h4>
+      <app-nav *ngIf="!showSideNav"></app-nav>
+
+      <div *ngIf="showSideNav" class="flex-auto flex justify-end">
+        <button mat-icon-button (click)="drawer.toggle()">
+          <mat-icon [inline]="true">menu</mat-icon>
+        </button>
+      </div>
+
+    </div>
+
+</mat-toolbar>
+
+<mat-drawer-container>
+
+  <mat-drawer #drawer [mode]="'over'">
+    <app-nav [align]="'vertical'"></app-nav>
+  </mat-drawer>
+
+  <mat-drawer-content class="">
+
+    <div class="container mx-auto">
+      <router-outlet></router-outlet>
+    </div>
+
+  </mat-drawer-content>
+
+</mat-drawer-container>
 
 
-  <div class="font-primary shadow rounded md:bg-accent-500">
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quam, excepturi.
-  </div>
+<app-footer></app-footer>
 
-  <div class="grid grid-cols-2 gap-8">
-    <div class="leading-6 col-span-2 text-lg md:text-xl md:col-span-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae quasi ad laborum officiis molestias quis numquam. Facilis mollitia placeat accusamus!</div>
-    <div class="leading-6 col-span-2 text-lg md:text-xl md:col-span-1">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officiis atque delectus mollitia, laborum pariatur debitis vel a nostrum corrupti sapiente.</div>
-    <div class="leading-6 col-span-2 text-lg md:text-xl">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam facilis aliquid dolorem molestias soluta culpa libero iure unde provident fugit sunt hic veniam, incidunt nostrum aspernatur repudiandae, qui magnam? Eum et aliquam fuga ipsam. Nulla perferendis nostrum culpa veniam impedit a nesciunt consequatur ullam temporibus. Sequi dicta itaque corrupti sint quidem modi tempore, praesentium, et ut natus quaerat! Optio, est!</div>
-  </div>
-
-</div>

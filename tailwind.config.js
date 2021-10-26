@@ -10,11 +10,14 @@ module.exports = {
           '200': '#5bb7d9',
           '300': '#43add4',
           '400': '#2ca2ce',
-          '500': '#1498c9',
+          '500': '#2B303A', // #1498c9
           '600': '#1289b5',
           '700': '#107aa1',
           '800': '#0e6a8d',
           '900': '#0c5b79'
+        },
+        accent: {
+          '500': '#86BBD8'
         }
       },
       fontFamily: {
@@ -28,11 +31,6 @@ module.exports = {
       DEFAULT: '0px 3px 3px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%)',
       'lg': '3px 4px 2px 0px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%)',
       none: 'none'
-    },
-    colors: {
-      accent: {
-        '500': '#4C956C'
-      }
     },
     // adapted to angular material breakpoints
     screens: {
