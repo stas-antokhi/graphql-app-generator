@@ -28,11 +28,6 @@ export class GraphqlAppCreateComponent implements OnInit {
       enabled: [true]
     });
 
-    //
-    this.schemaForm = this.fb.group({
-      types: this.fb.array([]),
-      queries: this.fb.array([])
-    });
 
     // TYPES TO ADD TO SCHEMA, TYPE | QUERY
     this.typeForm = this.fb.group({
@@ -49,7 +44,37 @@ export class GraphqlAppCreateComponent implements OnInit {
       defaultValue: [''],
       // if true -> display a panel to add fields!
       args: [false]
-    })
+    });
+
+
+    this.schemaForm = this.fb.group({
+      // un array di tipi, ogni tipo e' un formGroup
+      types: this.fb.array([
+        // rappresenta un tipo
+        // type Movie {}
+        this.fb.group({
+          name: ['', Validators.required],
+          type: ['type', Validators.required],
+          fields: this.fb.array([
+            /* rappresenta un field del tipo,
+              type Movie {
+                comments: [Comments]  <----field
+              }
+            */
+            this.fb.group({
+              name: ['', Validators.required],
+              returnType: ['String', Validators.required],
+              notNull: [false],
+              defaultValue: [''],
+              // if true -> display a panel to add fields!
+              args: [false]
+            })
+          ])
+        })
+      ]),
+      queries: this.fb.array([])
+    });
+
   }
 
   get schemaTypes(): FormArray {
