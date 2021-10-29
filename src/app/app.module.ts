@@ -28,7 +28,15 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import { GQLFieldComponent } from './shared/components/gql-field/gql-field.component';
+import { GraphqlFieldComponent } from './components/graphql-apps/graphql-field/graphql-field.component';
+import { GraphqlTypeComponent } from './components/graphql-apps/graphql-type/graphql-type.component';
+import { GraphqlAppComponent } from './components/graphql/graphql-app/graphql-app.component';
+import { GraphqlDescriptorComponent } from './components/graphql/graphql-descriptor/graphql-descriptor.component';
+import { GraphqlSchemaComponent, SchemaPreviewDialogComponent } from './components/graphql/graphql-schema/graphql-schema.component';
+import { GraphqlMappingsComponent } from './components/graphql/graphql-mappings/graphql-mappings.component';
+import {GraphqlSchemaEditorComponent} from './components/graphql/graphql-schema-editor/graphql-schema-editor.component';
+import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { monacoConfig } from './monaco-config/monaco-graphql-config';
 
 @NgModule({
   declarations: [
@@ -40,7 +48,14 @@ import { GQLFieldComponent } from './shared/components/gql-field/gql-field.compo
     NavComponent,
     FooterComponent,
     AppCardComponent,
-    GQLFieldComponent,
+    GraphqlFieldComponent,
+    GraphqlTypeComponent,
+    GraphqlAppComponent,
+    GraphqlDescriptorComponent,
+    GraphqlSchemaComponent,
+    GraphqlMappingsComponent,
+    SchemaPreviewDialogComponent,
+    GraphqlSchemaEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +76,11 @@ import { GQLFieldComponent } from './shared/components/gql-field/gql-field.compo
     MatDialogModule,
     MatProgressSpinnerModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MonacoEditorModule.forRoot(monacoConfig)
+  ],
+  entryComponents: [
+    SchemaPreviewDialogComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

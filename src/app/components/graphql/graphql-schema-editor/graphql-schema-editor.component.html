@@ -1,0 +1,13 @@
+<div>
+
+  <h1 class="mt-6 text-center">Define your schema</h1>
+
+
+  <ngx-monaco-editor [options]="{theme: 'vs-dark', language: 'graphql'}" #schema></ngx-monaco-editor>
+
+
+
+  <div>
+    <button mat-raised-button color="primary" (click)="generateSchema(schema)">Generate schema</button>
+  </div>
+</div>

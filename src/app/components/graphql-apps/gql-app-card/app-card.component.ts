@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Graphql } from 'src/app/shared/models/graphql';
 
 @Component({
   selector: 'gql-app-card[app]',
@@ -28,7 +27,7 @@ import { Graphql } from 'src/app/shared/models/graphql';
 })
 export class AppCardComponent implements OnInit {
 
-  @Input() app: Graphql.Descriptor = {} as Graphql.Descriptor;
+  @Input() app: any = {};
   @Input() uriPrefix: string = 'graphql/';
 
   constructor() { }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GraphqlAppsService } from 'src/app/core/services/graphql-apps.service';
-import { Graphql } from 'src/app/shared/models/graphql';
 
 @Component({
   selector: 'app-graphql-apps',
@@ -10,7 +9,7 @@ import { Graphql } from 'src/app/shared/models/graphql';
 })
 export class GraphqlAppsComponent implements OnInit {
 
-  apps$!: Observable<Graphql.App[]>;
+  apps$!: Observable<any>;
 
   constructor(private gqlSvc: GraphqlAppsService) { }
 

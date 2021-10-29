@@ -7,6 +7,15 @@ $light-text: rgba(white, 0.87);
 
 $dark: hsl(0, 0%, 27%);
 
+$hover: rgb(245,245,245);
+
+$card: hsl(0, 0%, 88%);
+
+$selected: hsl(0, 0%, 88%);
+
+$btn-disabled: hsl(0, 0%, 86%);
+$btn-disabled-text: rgba(0, 0, 0, 0.40);
+
 $light: hsl(0, 0%, 98%);
 $light-darker-5:   darken($light, 5%);
 $light-darker-10:  darken($light, 10%);

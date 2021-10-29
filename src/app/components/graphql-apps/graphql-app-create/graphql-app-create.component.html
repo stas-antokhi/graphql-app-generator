@@ -35,19 +35,7 @@
   </mat-step>
 </mat-stepper> -->
 
+<!-- <app-graphql-field></app-graphql-field> -->
 
-<form [formGroup]="schemaForm">
-
-
-    <ng-container *ngFor="let type of schemaTypes.controls; let i = index">
-      <mat-form-field appearance="fill">
-        <mat-label>Input</mat-label>
-        <input matInput [formControl]="getType(i)">
-      </mat-form-field>
-    </ng-container>
-
-</form>
-
-
-<button mat-button-raised (click)="addField()">Add control</button>
+<app-graphql-type></app-graphql-type>
 

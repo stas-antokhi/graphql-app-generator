@@ -8,3 +8,12 @@
 * {
   font-size: 16px;
 }
+
+* > {
+  box-sizing: border-box;
+}
+
+
+.mat-option.mat-selected:not(.mat-option-multiple) {
+  background: rgb(216, 216, 216)!important;
+}

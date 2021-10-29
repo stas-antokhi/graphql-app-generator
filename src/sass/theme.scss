@@ -7,24 +7,26 @@ $primary: mat.define-palette($primary, default, lighter, darker);
 $accent: mat.define-palette($accent, default, lighter, darker);
 $warn: mat.define-palette($warn, default, lighter, darker);
 
+// https://github.com/angular/components/blob/master/src/material/core/theming/_palette.scss
 
 $mat-light-theme-background: (
   background:               $light,
   status-bar:               $light,
   app-bar:                  $light,
-  hover:                    $dark,
+  hover:                    $hover,
   card:                     $light,
   dialog:                   $light,
-  tooltip:                  $dark,
-  disabled-button:          $dark,
-  raised-button:            $light-lighter-5,
+  tooltip:                  $light-darker-10,
+  disabled-button:          $btn-disabled,
+  raised-button:            $light,
   focused-button:           $dark,
-  selected-button:          $light-darker-20,
+  selected-button:          $selected,
   selected-disabled-button: $light-darker-30,
   disabled-button-toggle:   $light-darker-10,
   unselected-chip:          $light-darker-10,
   disabled-list-option:     $light-darker-10,
 );
+
 
 // Theme color for icons and texts
 $mat-light-theme-foreground: (
@@ -32,8 +34,8 @@ $mat-light-theme-foreground: (
   divider:           $dark,
   dividers:          $dark,
   disabled:          $dark,
-  disabled-button:   $dark,
-  disabled-text:     $dark,
+  disabled-button:   $btn-disabled-text,
+  disabled-text:     $btn-disabled-text,
   elevation:         $dark,
   hint-text:         $dark,
   secondary-text:    $dark,
