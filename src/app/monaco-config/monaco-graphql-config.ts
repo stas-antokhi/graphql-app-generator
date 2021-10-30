@@ -1,6 +1,9 @@
 import { NgxMonacoEditorConfig } from 'ngx-monaco-editor';
+import { JsonSchema } from '../shared/models/json-schema';
 
 declare const monaco: any;
+
+export const jsonModelUri = 'inmemory://model/2';
 
 export const monacoConfig: NgxMonacoEditorConfig = {
   onMonacoLoad() {
@@ -11,46 +14,6 @@ export const monacoConfig: NgxMonacoEditorConfig = {
       completionItemProvider
     );
 
-    monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-      validate: true,
-      schemas: [{
-          uri: "http://myserver/foo-schema.json", // id of the first schema
-          fileMatch: [
-            monaco.Uri.parse("a://b/foo.json")
-          ], // associate with our model
-          schema: {
-              type: "object",
-              properties: {
-                  p1: {
-                      enum: ["v1", "v2"]
-                  },
-                  p2: {
-                      $ref: "http://myserver/bar-schema.json" // reference the second schema
-                  },
-                  "User": {
-                      type: "object",
-                      properties: {
-                          name: {
-                              enum: ["stas"]
-                          }
-                      }
-                  }
-              }
-          }
-      }, {
-          uri: "http://myserver/bar-schema.json", // id of the second schema
-          schema: {
-              type: "object",
-              properties: {
-                  q1: {
-                      enum: ["x1", "x2"]
-                  }
-              }
-          }
-      }]
-    });
-
-    // Use default, creating a custom has a lot of props
     // monaco.editor.defineTheme('custom', theme);
   },
 };
@@ -88,15 +51,15 @@ const completionItemProvider = {
 const theme = {
   base: 'vs',
   inherit: true,
-  rules: [{ background: '2e4756' }],
+  rules: [{ background: '#2e4756' }],
   colors: {
-    'editor.foreground': '#ffffff',
+    // 'editor.foreground': '#ffffff',
     'editor.background': '#2e4756',
-    'editorCursor.foreground': '#ffffff',
-    'editor.lineHighlightBackground': '#2E5F7F',
-    'editorLineNumber.foreground': '#2E5F7F',
-    'editor.selectionBackground': '#88000030',
-    'editor.inactiveSelectionBackground': '#88000015',
+    // 'editorCursor.foreground': '#ffffff',
+    // 'editor.lineHighlightBackground': '#2E5F7F',
+    // 'editorLineNumber.foreground': '#2E5F7F',
+    // 'editor.selectionBackground': '#88000030',
+    // 'editor.inactiveSelectionBackground': '#88000015',
 
     // https://microsoft.github.io/monaco-editor/playground.html#customizing-the-appearence-exposed-colors
 
@@ -219,4 +182,107 @@ const theme = {
   },
 };
 
+export const updateSchema = (schema: any) => {
+  monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+    validate: true,
+    schemaValidation: 'error',
+    schemas: [
+      schema,
+      {
+        uri: "http://rh/field-to-field.json",
+        schema: {
+          type: 'string'
+        }
+      },
+      {
+        uri: 'http://rh/field-to-query.json', // id of the second schema
+        schema: {
+          type: 'object',
+          properties: {
+            db: {
+              type: 'string'
+            },
+            collection: {
+              type: 'string'
+            },
+            find: {
+              type: 'object'
+            },
+            limit: {
+              type: 'object'
+            },
+            sort: {
+              type: 'object'
+            },
+            skip: {
+              type: 'object'
+            },
+            allowDiskUse: {
+              type: 'boolean'
+            },
+            dataLoader: {
+              type: 'object',
+              properties: {
+                batching: {
+                  type: 'boolean'
+                },
+                caching: {
+                  type: 'boolean'
+                },
+                maxBatchSize: {
+                  type: 'integer'
+                }
+              }
+            }
+          },
+          required: ['db', 'collection', 'find'],
+          additionalProperties: false
+        }
+      },
+      {
+        uri: 'http://rh/field-to-aggregation.json', // id of the second schema
+        schema: {
+          type: 'object',
+          properties: {
+            db: {
+              type: 'string'
+            },
+            collection: {
+              type: 'string'
+            },
+            stages: {
+              type: 'array',
+              items: {
+                type: 'object'
+              },
+              minItems: 1
+            },
+            allowDiskUse: {
+              type: 'boolean'
+            }
+          },
+          required: ['db', 'collection', 'stages'],
+          additionalProperties: false
+        }
+      }
+    ],
+  });
+};
 
+const exampleSchema: { fileMatch?: string[]; schema?: any; uri: string } = {
+  uri: 'http://myserver/my-schema.json',
+  fileMatch: ['a://b/foo.json'],
+  schema: {
+    type: 'object',
+    properties: {
+      User: {
+        type: 'object',
+        properties: {
+          taac: {
+            enum: ['stas'],
+          },
+        },
+      },
+    },
+  },
+};
