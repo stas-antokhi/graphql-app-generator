@@ -37,6 +37,8 @@ import { GraphqlMappingsComponent } from './components/graphql/graphql-mappings/
 import {GraphqlSchemaEditorComponent} from './components/graphql/graphql-schema-editor/graphql-schema-editor.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { monacoConfig } from './monaco-config/monaco-graphql-config';
+import {MatRadioModule} from '@angular/material/radio';
+
 
 @NgModule({
   declarations: [
@@ -70,6 +72,7 @@ import { monacoConfig } from './monaco-config/monaco-graphql-config';
     MatCardModule,
     MatStepperModule,
     HttpClientModule,
+    MatRadioModule,
     MatFormFieldModule,
     MatInputModule,
     MatCheckboxModule,

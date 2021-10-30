@@ -1,6 +1,29 @@
-<app-graphql-schema-editor></app-graphql-schema-editor>
 
+<mat-stepper class="h-full" orientation="vertical" #stepper>
 
-<hr>
+  <!-- <mat-step [stepControl]="descriptorForm">
+    <app-graphql-descriptor [descriptorForm]="descriptorForm"></app-graphql-descriptor>
+  </mat-step> -->
 
-<app-graphql-mappings></app-graphql-mappings>
+  <mat-step [completed]="isDescriptorFormValid" label="Descriptor">
+    <app-graphql-descriptor (validForm)="onValidDescriptorForm($event)"></app-graphql-descriptor>
+  </mat-step>
+
+  <mat-step label="Schema">
+    <app-graphql-schema-editor></app-graphql-schema-editor>
+  </mat-step>
+
+  <mat-step label="Mappings">
+    <app-graphql-mappings></app-graphql-mappings>
+  </mat-step>
+
+  <mat-step label="Done!">
+    <ng-template matStepLabel>Done</ng-template>
+    <p>You are now done.</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+
+</mat-stepper>
