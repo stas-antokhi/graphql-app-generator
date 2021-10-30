@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GraphQLField, GraphQLFieldConfig, GraphQLFieldConfigMap, GraphQLFieldMap, GraphQLInt, GraphQLObjectType, GraphQLScalarType, GraphQLSchema, GraphQLString, printSchema, Thunk } from 'graphql';
 
 @Component({
@@ -17,56 +17,15 @@ export class GraphqlAppComponent implements OnInit {
 
   currentObjectFields: Thunk<GraphQLFieldConfigMap<any, any>> = {};
 
+  isDescriptorFormValid = false;
 
-  constructor(private fb: FormBuilder) { }
+  constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
 
-    // this.schemaForm = this.fb.group({
-    //   types: this.fb.array([]),
-    //   query: this.fb.array([])
-    // });
-
-    // this.pushField('object', {
-    //   comments: {
-    //     type: GraphQLString,
-    //     args: {
-    //       from: {
-    //         type: GraphQLString
-    //       }
-    //     }
-    //   }
-    // });
-
-    // const obj = this.generateObject('Movie', this.currentObjectFields);
-
-    // this.types.push(obj);
-
-    // this.pushField('query', {
-    //   findMovieById: {
-    //     type: GraphQLString,
-    //     args: {
-    //       name: {
-    //         type: GraphQLInt
-    //       }
-    //     }
-    //   }
-    // });
-
-    // this.pushField('query', {
-    //   test: {
-    //     type: GraphQLString,
-    //     args: {
-    //       name: {
-    //         type: GraphQLInt
-    //       }
-    //     }
-    //   }
-    // });
-
-    // console.log(this.generateSDLSchema());
+  onValidDescriptorForm(isValid: boolean) {
+    this.isDescriptorFormValid = isValid;
   }
-
 
   pushField(where: 'query' | 'object', field: Thunk<GraphQLFieldConfigMap<any, any>>) {
 
