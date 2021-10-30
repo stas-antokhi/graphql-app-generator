@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { buildSchema, GraphQLObjectType, GraphQLSchema } from 'graphql';
 import { TypeMap } from 'graphql/type/schema';
 import { BehaviorSubject } from 'rxjs';
+import { MonacoEditorService } from 'src/app/core/services/monaco-editor.service';
 import { scalars } from 'src/app/shared/restheart-custom-scalars';
 
 @Component({
@@ -11,11 +12,24 @@ import { scalars } from 'src/app/shared/restheart-custom-scalars';
 })
 export class GraphqlSchemaEditorComponent implements OnInit {
 
+  exampleSchema = `
+    type User {
+      id: ObjectId
+      name: String
+      email: String
+    }
+
+    type Query {
+      findById(id: ObjectId): User
+      findByEmail(email: String): User
+    }
+  `;
+
   schema$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   customScalars = scalars.map(scalar => `scalar ${scalar}`).join('\n');
 
-  constructor() { }
+  constructor(private monacoSvc: MonacoEditorService) { }
 
   ngOnInit(): void {
     console.log(this.customScalars);
@@ -31,7 +45,7 @@ export class GraphqlSchemaEditorComponent implements OnInit {
     // console.log(builtSchema.getType('User'));
     const objTypesWithFields = this.generateObjectsWithFields(types, builtSchema);
 
-    console.log(objTypesWithFields);
+    this.monacoSvc.generateJsonSchemaFromTypes(objTypesWithFields)
   }
 
   // example output: ['User', 'Movie', ...]
