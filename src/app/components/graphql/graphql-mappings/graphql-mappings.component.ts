@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxEditorModel } from 'ngx-monaco-editor';
+import { MonacoEditorService } from 'src/app/core/services/monaco-editor.service';
+import { updateSchema } from 'src/app/monaco-config/monaco-graphql-config';
 
 @Component({
   selector: 'app-graphql-mappings',
@@ -13,19 +15,15 @@ export class GraphqlMappingsComponent implements OnInit {
     language: 'json'
   }
 
+  editorOptions = {
+    theme: 'vs-dark',
+    language: 'json'
+  }
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
-
-  logMappings(editor: any) {
-    try {
-      console.log(JSON.parse(editor._value));
-
-    } catch(err) {
-      console.error(err)
-    }
-  }
 
 }

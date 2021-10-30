@@ -1,6 +1,6 @@
 <h1 class="text-center">Define your mappings</h1>
 
 
-<ngx-monaco-editor [options]="{theme: 'vs-dark', language: 'json'}" [model]="model" #editor></ngx-monaco-editor>
+<ngx-monaco-editor [options]="editorOptions" [model]="model" #editor></ngx-monaco-editor>
 
-<button mat-raised-button (click)="logMappings(editor)">Log</button>
+
