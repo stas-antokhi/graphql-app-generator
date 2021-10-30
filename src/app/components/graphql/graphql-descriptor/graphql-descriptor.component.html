@@ -1,1 +1,32 @@
-<p>graphql-descriptor works!</p>
+
+<form [formGroup]="descriptorForm" class="grid grid-cols-12 gap-5">
+
+  <mat-form-field appearance="fill" class="col-span-6">
+    <mat-label>Name</mat-label>
+    <input matInput [autocomplete]="false" placeholder="RESTHeart" formControlName="name" required>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="col-span-6">
+    <mat-label>Description</mat-label>
+    <input matInput [autocomplete]="false" placeholder="My cool graphql app!" formControlName="description">
+  </mat-form-field>
+
+  <mat-form-field autocomplete="false" appearance="fill" class="col-span-6">
+    <mat-label>URI</mat-label>
+    <input matInput [autocomplete]="false" placeholder="my-app" formControlName="uri" required>
+  </mat-form-field>
+
+  <div class="col-span-6 flex items-top flex-col">
+    <label>Enabled</label>
+    <mat-radio-group class="mt-2" formControlName="enabled">
+      <mat-radio-button [value]="true">True</mat-radio-button>
+      <mat-radio-button class="ml-3" [value]="false">False</mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <div class="col-span-6">
+    <button mat-raised-button color="primary" [disabled]="!descriptorForm.valid" matStepperNext>Let's create a schema</button>
+  </div>
+
+</form>
+
