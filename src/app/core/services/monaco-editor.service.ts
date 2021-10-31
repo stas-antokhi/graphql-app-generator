@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GraphQLFieldMap } from 'graphql';
-import { jsonModelUri, updateSchema } from 'src/app/monaco-config/monaco-graphql-config';
-import { JsonSchema } from 'src/app/shared/models/json-schema';
+import { updateSchema } from 'src/app/monaco-config/monaco-editor-config';
 
 interface TypesWithFields {
   [key: string]: GraphQLFieldMap<any, any>
@@ -12,70 +11,60 @@ interface TypesWithFields {
 })
 export class MonacoEditorService {
 
+  /*
+    field -> field
+    field -> query
+    field -> aggregation
+    https://restheart.org/docs/graphql/#mappings
+   */
+  private typesOfMappings = {
+    Obj: [
+      { $ref: "http://rh/field-to-query.json" },
+      { $ref: "http://rh/field-to-aggregation.json" },
+      { $ref: "http://rh/field-to-field.json"}
+    ],
+    Query: [
+      { $ref: "http://rh/field-to-query.json" },
+      { $ref: "http://rh/field-to-aggregation.json" },
+    ]
+  }
+
+  /**
+   * Given an array of [type: fieldsArray] generate a JSON schema for mappings validation.
+   * @param objTypesWithFields
+   */
   generateJsonSchemaFromTypes(objTypesWithFields: TypesWithFields[]) {
 
-    const reduceToObject = objTypesWithFields.reduce((acc, curr) => Object.assign(acc, curr), {});
+    const reducedArrayToObj = objTypesWithFields.reduce((acc, curr) => Object.assign(acc, curr), {});
 
-    let jsonSchema = {};
+    const requiredTypes: string[] = [];
 
-    const fieldTypeSchema = {
-      objectTypes: [
-        { $ref: "http://rh/field-to-query.json" },
-        { $ref: "http://rh/field-to-aggregation.json" },
-        { $ref: "http://rh/field-to-field.json"}
-      ],
-      queryType: [
-        { $ref: "http://rh/field-to-query.json" },
-        { $ref: "http://rh/field-to-aggregation.json" },
-      ]
-    }
+    let mappingsSchema = {};
 
-    for(const [type, fields] of Object.entries(reduceToObject)) {
-      const objName = type;
-      const objFieldsArray = Object.keys(fields);
 
-      let currentTypeSchema: any = {};
+    for(const [type, fields] of Object.entries(reducedArrayToObj)) {
 
-      if(objName !== 'Query') {
+      const currentTypeName: string = type;
+      const currentTypeFields: string[] = Object.keys(fields);
 
-        currentTypeSchema = {
-          [objName]: {
-            type: 'object',
-            additionalProperties: false,
-            properties: objFieldsArray.reduce((acc, currField) => {
-
-              return Object.assign(acc, {
-                [currField]: {
-                  oneOf: fieldTypeSchema.objectTypes
-                }
-              })
-            }, {})
-          }
+      let currentTypeJsonSchema: any = {
+        [currentTypeName]: {
+          type: 'object',
+          additionalProperties: false,
+          properties: this.reduceFieldsArrayToObject(
+            currentTypeFields,
+            currentTypeName === 'Query' ? 'Query' : 'Obj'
+          )
         }
-
-      } else {
-
-        currentTypeSchema = {
-          [objName]: {
-            type: 'object',
-            additionalProperties: false,
-            properties: objFieldsArray.reduce((acc, currField) => {
-
-              return Object.assign(acc, {
-                [currField]: {
-                  oneOf: fieldTypeSchema.queryType
-                }
-              })
-            }, {})
-          }
-        }
-
-        currentTypeSchema.Query.required = objFieldsArray;
-
       }
 
+      // If schema has Query type, all fields must be defined in mappings!
+      if(currentTypeName === 'Query') {
+          currentTypeJsonSchema.Query.required = currentTypeFields;
+          requiredTypes.push('Query')
+      }
 
-      Object.assign(jsonSchema, currentTypeSchema);
+      Object.assign(mappingsSchema, currentTypeJsonSchema);
 
     }
 
@@ -84,16 +73,23 @@ export class MonacoEditorService {
       uri: 'http://rh/example.json',
       schema: {
         type: 'object',
-        properties: jsonSchema,
+        properties: mappingsSchema,
         additionalProperties: false,
-        required: ['Query']
+        required: requiredTypes
       }
     }
 
-
     updateSchema(schema);
-
   }
 
+  private reduceFieldsArrayToObject(fieldsArray: string[], objectType: 'Query' | 'Obj') {
+    return fieldsArray.reduce((acc, curr) => {
+      return Object.assign(acc, {
+        [curr]: {
+          oneOf: this.typesOfMappings[objectType]
+        }
+      })
+    }, {});
+  }
 
 }
