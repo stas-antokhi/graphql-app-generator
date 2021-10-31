@@ -1,12 +1,21 @@
-<div>
+<div style="min-height: 500px;" class="flex flex-col">
 
   <h1 class="mt-6 text-center">Define your schema</h1>
 
 
-  <ngx-monaco-editor [options]="{theme: 'vs-dark', language: 'graphql'}" #schema></ngx-monaco-editor>
+  <ngx-monaco-editor
+    class="flex-1"
+    [options]="{theme: 'vs-dark', language: 'graphql'}"
+    [(ngModel)]="_schema"
+    (ngModelChange)="onModelChange()"
+    #editor
+  ></ngx-monaco-editor>
 
   <div>
-    <button mat-raised-button color="primary" (click)="generateSchema(schema)">Generate schema</button>
+    <button mat-raised-button #schemaBtn color="primary" (click)="verifyAndGenerateSchema()">
+      Verify schema
+    </button>
+    <button class="ml-5" mat-raised-button color="primary" [disabled]="isNextStepDisabled"  matStepperNext>Next</button>
   </div>
 
 </div>

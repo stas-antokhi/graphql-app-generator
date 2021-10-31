@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatStepper } from '@angular/material/stepper';
+import { Router } from '@angular/router';
 import { GraphQLField, GraphQLFieldConfig, GraphQLFieldConfigMap, GraphQLFieldMap, GraphQLInt, GraphQLObjectType, GraphQLScalarType, GraphQLSchema, GraphQLString, printSchema, Thunk } from 'graphql';
+import { BehaviorSubject } from 'rxjs';
+import { GraphqlAppsService } from 'src/app/core/services/graphql-apps.service';
+import { Graphql } from 'src/app/shared/models/GraphQLApp';
 
 @Component({
   selector: 'app-graphql-app',
@@ -9,59 +14,65 @@ import { GraphQLField, GraphQLFieldConfig, GraphQLFieldConfigMap, GraphQLFieldMa
 })
 export class GraphqlAppComponent implements OnInit {
 
-  types: GraphQLObjectType[] = [];
-
-  queryFields: Thunk<GraphQLFieldConfigMap<any, any>> = {};
-
-  schemaForm!: FormGroup;
-
-  currentObjectFields: Thunk<GraphQLFieldConfigMap<any, any>> = {};
-
   isDescriptorFormValid = false;
+  isSchemaValid = false;
+  isMappingsValid = false;
 
-  constructor() { }
+  descriptor!: Graphql.Descriptor;
+  schema!: string;
+  mappings: any;
+
+  @ViewChild('stepper') stepper!: MatStepper;
+
+  constructor(private graphqlSvc: GraphqlAppsService, private router: Router) { }
 
   ngOnInit(): void {}
+
+  updateDescriptor(descriptor: Graphql.Descriptor) {
+    this.descriptor = descriptor;
+  }
+
+  updateSchema(schema: string) {
+    this.schema = schema;
+  }
+
+  updateMappings(mappings: any) {
+    this.mappings = mappings;
+  }
 
   onValidDescriptorForm(isValid: boolean) {
     this.isDescriptorFormValid = isValid;
   }
 
-  pushField(where: 'query' | 'object', field: Thunk<GraphQLFieldConfigMap<any, any>>) {
+  onValidSchema(isValid: boolean) {
+    this.isSchemaValid = isValid;
+  }
 
-    if (where === 'object') {
-      this.currentObjectFields = Object.assign(this.currentObjectFields, field);
-    } else if(where === 'query') {
-      this.queryFields = Object.assign(this.queryFields, field);
+  onValidMappings(isValid: boolean) {
+    this.isMappingsValid = isValid;
+  }
+
+  onMappingsNext() {
+    if(this.isMappingsValid === true) {
+      this.stepper.next();
     }
   }
 
+  createApp() {
+    if(this.isDescriptorFormValid && this.isSchemaValid && this.isMappingsValid) {
 
-  get schemaTypes(): FormArray {
-    return (this.schemaForm.get('types') as FormArray);
+      const app: Graphql.App = {
+        descriptor: this.descriptor,
+        schema: this.schema.replace(/\n/g, ''),
+        mappings: JSON.parse(this.mappings)
+      };
+
+      this.graphqlSvc.createApp(app).subscribe(resp => {
+        if(resp.status === 201) {
+          this.router.navigate(['apps']);
+        }
+      });
+
+    }
   }
-
-
-  generateObject(name: string, fields: Thunk<GraphQLFieldConfigMap<any, any>>): GraphQLObjectType {
-
-    this.currentObjectFields = {};
-
-    return new GraphQLObjectType({
-      name,
-      fields
-    });
-  }
-
-
-  // Schema Definition Language
-  generateSDLSchema(): string {
-    return printSchema(
-      new GraphQLSchema({
-        types: this.types,
-        query: this.generateObject('Query', this.queryFields)
-      })
-    );
-  }
-
-
 }

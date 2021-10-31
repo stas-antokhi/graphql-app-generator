@@ -1,6 +1,17 @@
-<h1 class="text-center">Define your mappings</h1>
+<div class="flex flex-col" style="min-height: 650px;">
+
+  <h1 class="text-center">Define your mappings</h1>
+
+  <ngx-monaco-editor
+    class="flex-1"
+    [options]="editorOptions"
+    [(ngModel)]="_mappings"
+  ></ngx-monaco-editor>
 
 
-<ngx-monaco-editor [options]="editorOptions" [model]="model" #editor></ngx-monaco-editor>
+  <div>
+    <button mat-raised-button color="primary" (click)="checkForErrors()">Next</button>
+  </div>
+</div>
 
 

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { Graphql } from 'src/app/shared/models/GraphQLApp';
 
 @Component({
   selector: 'app-graphql-descriptor',
@@ -10,6 +11,8 @@ import { Subscription } from 'rxjs';
 export class GraphqlDescriptorComponent implements OnInit, OnDestroy {
 
   @Output() validForm = new EventEmitter<boolean>();
+
+  @Output() descriptor = new EventEmitter<Graphql.Descriptor>();
 
   descriptorForm!: FormGroup;
 
@@ -26,8 +29,12 @@ export class GraphqlDescriptorComponent implements OnInit, OnDestroy {
     });
 
     this.statusSub = this.descriptorForm.statusChanges.subscribe(
-      status => this.validForm.emit(status === 'VALID')
+      status => {
+        this.validForm.emit(status === 'VALID');
+        this.descriptor.emit(this.descriptorForm.value as Graphql.Descriptor);
+      }
     );
+
   }
 
   ngOnDestroy() {

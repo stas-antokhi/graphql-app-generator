@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { NgxEditorModel } from 'ngx-monaco-editor';
-import { MonacoEditorService } from 'src/app/core/services/monaco-editor.service';
-import { updateSchema } from 'src/app/monaco-config/monaco-graphql-config';
+import {  Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { getModelMarkers } from 'src/app/monaco-config/monaco-editor-config';
+import { ModelMarker } from 'src/app/shared/models/json-schema';
 
 @Component({
   selector: 'app-graphql-mappings',
@@ -10,20 +10,75 @@ import { updateSchema } from 'src/app/monaco-config/monaco-graphql-config';
 })
 export class GraphqlMappingsComponent implements OnInit {
 
-  model: NgxEditorModel = {
-    value: '',
-    language: 'json'
-  }
+  _mappings: string = `{\n\n}`;
 
   editorOptions = {
     theme: 'vs-dark',
     language: 'json'
   }
 
-  constructor() { }
+
+  @Output() isMappingsValid = new EventEmitter<boolean>(false);
+  @Output() stepNext = new EventEmitter<void>();
+
+  @Output() mappings = new EventEmitter<any>();
+
+  constructor(private dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
 
 
+  checkForErrors() {
+    const markers = getModelMarkers();
+
+    if(markers.length !== 0) {
+      this.isMappingsValid.emit(false);
+      this.dialog.open(MappingsErrorDialog, {
+        data: {
+          markers
+        }
+      });
+    } else {
+      this.isMappingsValid.emit(true);
+      this.mappings.emit(this._mappings);
+      setTimeout(() => this.stepNext.emit(), 0);
+    }
+  }
+
+}
+
+@Component({
+  selector: 'app-mappings-error-dialog',
+  styles: [],
+  template: `
+    <h1>Your mappings contain the following errors.</h1>
+
+    <div class="my-6">
+     <div *ngFor="let marker of data.markers">
+       <pre>{{marker.message}}</pre>
+     </div>
+    </div>
+
+    <p>
+      If you need help please check out the <a class="text-accent-500" href="https://restheart.org/docs/graphql/#mappings">documentation</a>.
+    </p>
+
+    <div class="flex justify-center mt-5">
+      <button class="bg-primary-500 px-6 py-2 text-gray-200 rounded shadow" (click)="closeDialog()">Ok</button>
+    </div>
+  `
+})
+export class MappingsErrorDialog {
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: {markers: ModelMarker[]},
+    public dialogRef: MatDialogRef<MappingsErrorDialog>
+  ) {
+    console.log(this.data.markers)
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
 }
