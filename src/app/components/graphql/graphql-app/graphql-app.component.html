@@ -1,31 +1,24 @@
 
 <mat-stepper [linear]="true" class="h-full" orientation="vertical" #stepper>
 
-  <!-- <mat-step [stepControl]="descriptorForm">
-    <app-graphql-descriptor [descriptorForm]="descriptorForm"></app-graphql-descriptor>
-  </mat-step> -->
-
   <mat-step [completed]="isDescriptorFormValid" label="Descriptor">
-    <app-graphql-descriptor (descriptor)="updateDescriptor($event)" (validForm)="onValidDescriptorForm($event)"></app-graphql-descriptor>
+    <app-graphql-descriptor [(descriptor)]="descriptor" (stepNext)="stepper.next()" (validForm)="onValidDescriptorForm($event)"></app-graphql-descriptor>
   </mat-step>
 
   <mat-step [completed]="isSchemaValid" label="Schema" class="h-full">
     <ng-template matStepContent>
-      <app-graphql-schema-editor (schema)="updateSchema($event)" (isSchemaValid)="onValidSchema($event)"></app-graphql-schema-editor>
+      <app-graphql-schema-editor [(schema)]="schema" (isSchemaValid)="onValidSchema($event)"></app-graphql-schema-editor>
     </ng-template>
   </mat-step>
 
   <mat-step [completed]="isMappingsValid" label="Mappings">
     <ng-template matStepContent>
-      <app-graphql-mappings (mappings)="updateMappings($event)" (stepNext)="onMappingsNext()" (isMappingsValid)="onValidMappings($event)"></app-graphql-mappings>
+      <app-graphql-mappings [(mappings)]="mappings" (stepNext)="onMappingsNext()" (isMappingsValid)="onValidMappings($event)"></app-graphql-mappings>
     </ng-template>
   </mat-step>
 
   <mat-step label="Done!">
-    <p>Congratulations, you can now create you application</p>
-    <div>
-      <button mat-raised-button color="primary" (click)="createApp()">Create!</button>
-    </div>
+    <ng-content></ng-content>
   </mat-step>
 
 </mat-stepper>

@@ -1,11 +1,9 @@
-import { AfterViewInit, Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
+import {  Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { buildSchema, GraphQLError, GraphQLFormattedError, GraphQLObjectType, GraphQLSchema } from 'graphql';
+import { buildSchema, GraphQLError, GraphQLFormattedError, GraphQLObjectType, GraphQLSchema, printSchema } from 'graphql';
 import { TypeMap } from 'graphql/type/schema';
-import { EditorComponent } from 'ngx-monaco-editor';
-import { BehaviorSubject } from 'rxjs';
 import { MonacoEditorService } from 'src/app/core/services/monaco-editor.service';
 import { scalars } from 'src/app/shared/restheart-custom-scalars';
 
@@ -16,28 +14,19 @@ import { scalars } from 'src/app/shared/restheart-custom-scalars';
 })
 export class GraphqlSchemaEditorComponent implements OnInit {
 
-  _schema: string =`type User {
-  id: ObjectId
-  name: String
-  email: String
-}
-
-type Query {
-  findById(id: ObjectId): User
-  findByEmail(email: String): User
-}
-  `;
-
   @ViewChild('schemaBtn') schemaBtn!: MatButton;
-  @ViewChild('editor') editor!: EditorComponent;
 
   @Output() isSchemaValid = new EventEmitter<boolean>(false);
 
-  @Output() schema = new EventEmitter<string>();
+  @Input() schema: string = '';
+  @Output() schemaChange = new EventEmitter<string>();
 
   isNextStepDisabled = true;
 
   customScalars = scalars.map(scalar => `scalar ${scalar}`).join('\n');
+
+  _isSchemaValid = true;
+
 
   constructor(
     private monacoSvc: MonacoEditorService,
@@ -49,34 +38,35 @@ type Query {
 
   onModelChange() {
     this.isNextStepDisabled = true;
-    this.isSchemaValid.emit(false);
-    this.schemaBtn.color = "primary";
   }
 
   ngOnInit(): void {
   }
 
   verifyAndGenerateSchema() {
-    const schemaWithCustomScalars = `${this.customScalars} ${this._schema}`;
-
+    const schemaWithCustomScalars = `${this.schema ?? ''}\n\n ${this.customScalars}`;
     try {
-      const builtSchema: GraphQLSchema  = buildSchema(schemaWithCustomScalars);
+      const gqlSchema: GraphQLSchema  = buildSchema(schemaWithCustomScalars);
 
+      // Convert back to string and remove scalars
+      let strSchema = printSchema(gqlSchema);
+      this.schema = strSchema.slice(0, strSchema.lastIndexOf('}') + 1);
+
+      this._isSchemaValid = true;
+      this.schemaChange.emit(this.schema);
       this.isSchemaValid.emit(true);
       this.isNextStepDisabled = false;
       this.schemaBtn.color = "primary";
       this.snackbar.open('Your schema has no errors!', 'Close', {duration: 3000});
-      this.schema.emit(this._schema);
 
-      const types: TypeMap = builtSchema.getTypeMap();
+      const types: TypeMap = gqlSchema.getTypeMap();
 
-      // console.log(builtSchema.getType('User'));
-      const objTypesWithFields = this.generateObjectsWithFields(types, builtSchema);
+      const objTypesWithFields = this.generateObjectsWithFields(types, gqlSchema);
 
       this.monacoSvc.generateJsonSchemaFromTypes(objTypesWithFields)
 
     } catch(err: any) {
-
+      this._isSchemaValid = false;
       this.isSchemaValid.emit(false);
       this.isNextStepDisabled = true;
       this.schemaBtn.color = "warn";
@@ -86,7 +76,6 @@ type Query {
       }
     }
   }
-
 
   private openSchemaErrorDialog(error: any) {
     this.schemaErrorDialog.open(SchemaParseErrorDialog, {

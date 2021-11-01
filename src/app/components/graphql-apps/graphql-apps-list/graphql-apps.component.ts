@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { GraphqlAppsService } from 'src/app/core/services/graphql-apps.service';
+import { Graphql } from 'src/app/shared/models/GraphQLApp';
 
 @Component({
   selector: 'app-graphql-apps',
@@ -9,12 +10,21 @@ import { GraphqlAppsService } from 'src/app/core/services/graphql-apps.service';
 })
 export class GraphqlAppsComponent implements OnInit {
 
-  apps$!: Observable<any>;
+  apps$: BehaviorSubject<Graphql.App[]> = new BehaviorSubject<Graphql.App[]>([]);
 
-  constructor(private gqlSvc: GraphqlAppsService) { }
+
+  constructor(private graphqlSvc: GraphqlAppsService) { }
 
   ngOnInit(): void {
-    this.apps$ = this.gqlSvc.getAllApps();
+    this.graphqlSvc.getAllApps().subscribe(apps => this.apps$.next(apps));
+  }
+
+  deleteApp(data: { $oid: string}) {
+    this.graphqlSvc.deleteApp(data.$oid).subscribe(resp => {
+      if(resp.status === 204) {
+        this.apps$.next(this.apps$.getValue().filter(app => app._id?.$oid !== data.$oid));
+      }
+    })
   }
 
 }

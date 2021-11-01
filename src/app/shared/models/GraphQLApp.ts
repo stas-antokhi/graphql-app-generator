@@ -1,7 +1,9 @@
-
 export namespace Graphql {
 
   export interface App {
+    _id?: {
+      $oid: string;
+    };
     descriptor: Descriptor
     schema: string;
     mappings: any;

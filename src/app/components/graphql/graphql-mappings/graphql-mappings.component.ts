@@ -10,22 +10,24 @@ import { ModelMarker } from 'src/app/shared/models/json-schema';
 })
 export class GraphqlMappingsComponent implements OnInit {
 
-  _mappings: string = `{\n\n}`;
-
   editorOptions = {
     theme: 'vs-dark',
     language: 'json'
   }
 
-
   @Output() isMappingsValid = new EventEmitter<boolean>(false);
   @Output() stepNext = new EventEmitter<void>();
 
-  @Output() mappings = new EventEmitter<any>();
+  @Input() mappings!: any;
+  @Output() mappingsChange = new EventEmitter<any>();
 
   constructor(private dialog: MatDialog) { }
 
+
   ngOnInit(): void {
+    if(!this.mappings) {
+      this.mappings = `{\n\n}`;
+    }
   }
 
 
@@ -41,7 +43,7 @@ export class GraphqlMappingsComponent implements OnInit {
       });
     } else {
       this.isMappingsValid.emit(true);
-      this.mappings.emit(this._mappings);
+      this.mappingsChange.emit(this.mappings);
       setTimeout(() => this.stepNext.emit(), 0);
     }
   }

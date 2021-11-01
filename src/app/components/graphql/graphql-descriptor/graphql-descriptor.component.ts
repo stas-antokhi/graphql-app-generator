@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Graphql } from 'src/app/shared/models/GraphQLApp';
@@ -8,15 +8,16 @@ import { Graphql } from 'src/app/shared/models/GraphQLApp';
   templateUrl: './graphql-descriptor.component.html',
   styleUrls: ['./graphql-descriptor.component.scss']
 })
-export class GraphqlDescriptorComponent implements OnInit, OnDestroy {
+export class GraphqlDescriptorComponent implements OnInit {
 
   @Output() validForm = new EventEmitter<boolean>();
 
-  @Output() descriptor = new EventEmitter<Graphql.Descriptor>();
+  @Output() stepNext = new EventEmitter<void>();
+
+  @Input() descriptor!: Graphql.Descriptor;
+  @Output() descriptorChange = new EventEmitter<Graphql.Descriptor>();
 
   descriptorForm!: FormGroup;
-
-  statusSub!: Subscription;
 
   constructor(private fb: FormBuilder) { }
 
@@ -28,17 +29,18 @@ export class GraphqlDescriptorComponent implements OnInit, OnDestroy {
       enabled: [true]
     });
 
-    this.statusSub = this.descriptorForm.statusChanges.subscribe(
-      status => {
-        this.validForm.emit(status === 'VALID');
-        this.descriptor.emit(this.descriptorForm.value as Graphql.Descriptor);
-      }
-    );
-
+    if(this.descriptor) {
+      const {description, uri, name, enabled} = this.descriptor;
+      this.descriptorForm.setValue({description, uri, name, enabled});
+    }
   }
 
-  ngOnDestroy() {
-    this.statusSub.unsubscribe();
+  onNextStep() {
+    if(this.descriptorForm.valid) {
+      this.validForm.emit(true);
+      this.descriptorChange.emit(this.descriptorForm.value);
+      setTimeout(() => this.stepNext.emit(), 0);
+    }
   }
 
 }

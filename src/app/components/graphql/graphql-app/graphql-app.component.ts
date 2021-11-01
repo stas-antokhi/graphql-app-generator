@@ -1,9 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
 import { Router } from '@angular/router';
-import { GraphQLField, GraphQLFieldConfig, GraphQLFieldConfigMap, GraphQLFieldMap, GraphQLInt, GraphQLObjectType, GraphQLScalarType, GraphQLSchema, GraphQLString, printSchema, Thunk } from 'graphql';
-import { BehaviorSubject } from 'rxjs';
 import { GraphqlAppsService } from 'src/app/core/services/graphql-apps.service';
 import { Graphql } from 'src/app/shared/models/GraphQLApp';
 
@@ -13,6 +10,8 @@ import { Graphql } from 'src/app/shared/models/GraphQLApp';
   styleUrls: ['./graphql-app.component.scss']
 })
 export class GraphqlAppComponent implements OnInit {
+
+  @Input() app!: Graphql.App | undefined;
 
   isDescriptorFormValid = false;
   isSchemaValid = false;
@@ -24,23 +23,20 @@ export class GraphqlAppComponent implements OnInit {
 
   @ViewChild('stepper') stepper!: MatStepper;
 
-  constructor(private graphqlSvc: GraphqlAppsService, private router: Router) { }
+  constructor() { }
 
-  ngOnInit(): void {}
 
-  updateDescriptor(descriptor: Graphql.Descriptor) {
-    this.descriptor = descriptor;
+  ngOnInit(): void {
+    if(this.app !== undefined) {
+      this.descriptor = this.app.descriptor;
+      this.schema = this.app.schema;
+      this.mappings = JSON.stringify(this.app.mappings, null, 2);
+    }
   }
 
-  updateSchema(schema: string) {
-    this.schema = schema;
-  }
-
-  updateMappings(mappings: any) {
-    this.mappings = mappings;
-  }
 
   onValidDescriptorForm(isValid: boolean) {
+    console.log(isValid)
     this.isDescriptorFormValid = isValid;
   }
 
@@ -58,21 +54,13 @@ export class GraphqlAppComponent implements OnInit {
     }
   }
 
-  createApp() {
-    if(this.isDescriptorFormValid && this.isSchemaValid && this.isMappingsValid) {
 
-      const app: Graphql.App = {
-        descriptor: this.descriptor,
-        schema: this.schema.replace(/\n/g, ''),
-        mappings: JSON.parse(this.mappings)
-      };
-
-      this.graphqlSvc.createApp(app).subscribe(resp => {
-        if(resp.status === 201) {
-          this.router.navigate(['apps']);
-        }
-      });
-
+  getApp(): Graphql.App {
+    return {
+      descriptor: this.descriptor,
+      schema: this.schema.replace(/\n/g, ''),
+      mappings: JSON.parse(this.mappings)
     }
   }
+
 }

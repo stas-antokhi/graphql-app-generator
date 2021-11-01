@@ -1,0 +1,8 @@
+<div *ngIf="(app | async) as _app">
+  <app-graphql-app *ngIf="_app" [app]="_app" #gqlApp>
+    <div>
+      <button mat-raised-button color="primary" (click)="editApp()">Edit!</button>
+    </div>
+  </app-graphql-app>
+</div>
+

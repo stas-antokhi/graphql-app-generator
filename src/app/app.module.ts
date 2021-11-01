@@ -37,6 +37,10 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { monacoConfig } from './monaco-config/monaco-editor-config';
 import { MatRadioModule } from '@angular/material/radio';
 import { MappingsErrorDialog } from './components/graphql/graphql-mappings/graphql-mappings.component';
+import { GraphqlCreateComponent } from './components/graphql-apps/graphql-create/graphql-create.component';
+import { GraphqlEditComponent } from './components/graphql-apps/graphql-edit/graphql-edit.component';
+import { ConfirmActionDialogComponent } from './shared/components/confirm-action-dialog/confirm-action-dialog.component';
+import { PageHeaderComponent } from './shared/components/page-header/page-header.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +56,10 @@ import { MappingsErrorDialog } from './components/graphql/graphql-mappings/graph
     GraphqlSchemaEditorComponent,
     SchemaParseErrorDialog,
     MappingsErrorDialog,
+    GraphqlCreateComponent,
+    GraphqlEditComponent,
+    ConfirmActionDialogComponent,
+    PageHeaderComponent,
   ],
   imports: [
     FormsModule,

@@ -6,7 +6,7 @@
   <ngx-monaco-editor
     class="flex-1"
     [options]="{theme: 'vs-dark', language: 'graphql'}"
-    [(ngModel)]="_schema"
+    [(ngModel)]="schema"
     (ngModelChange)="onModelChange()"
     #editor
   ></ngx-monaco-editor>
@@ -15,7 +15,7 @@
     <button mat-raised-button #schemaBtn color="primary" (click)="verifyAndGenerateSchema()">
       Verify schema
     </button>
-    <button class="ml-5" mat-raised-button color="primary" [disabled]="isNextStepDisabled"  matStepperNext>Next</button>
+    <button class="ml-5" mat-raised-button color="primary" [disabled]="isNextStepDisabled" matStepperNext>Next</button>
   </div>
 
 </div>
