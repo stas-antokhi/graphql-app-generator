@@ -37,10 +37,7 @@ export class MonacoEditorService {
 
     const reducedArrayToObj = objTypesWithFields.reduce((acc, curr) => Object.assign(acc, curr), {});
 
-    const requiredTypes: string[] = [];
-
     let mappingsSchema = {};
-
 
     for(const [type, fields] of Object.entries(reducedArrayToObj)) {
 
@@ -61,7 +58,6 @@ export class MonacoEditorService {
       // If schema has Query type, all fields must be defined in mappings!
       if(currentTypeName === 'Query') {
           currentTypeJsonSchema.Query.required = currentTypeFields;
-          requiredTypes.push('Query')
       }
 
       Object.assign(mappingsSchema, currentTypeJsonSchema);
@@ -75,7 +71,7 @@ export class MonacoEditorService {
         type: 'object',
         properties: mappingsSchema,
         additionalProperties: false,
-        required: requiredTypes
+        required: ['Query']
       }
     }
 
