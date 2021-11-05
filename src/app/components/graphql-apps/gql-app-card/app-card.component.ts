@@ -6,14 +6,14 @@ import { Graphql } from 'src/app/shared/models/GraphQLApp';
 @Component({
   selector: 'gql-app-card[app]',
   template: `
-    <mat-card class="">
+    <mat-card class="flex-grow flex flex-col">
 
       <mat-card-title class="text-lg text-center">
         <h1>{{app.descriptor.name}}</h1>
       </mat-card-title>
 
-      <mat-card-content class="flex flex-col">
-        <p class="flex-1 text-lg mb-5">
+      <mat-card-content class="flex flex-col flex-grow">
+        <p class="text-lg mb-5 flex-grow">
           {{app.descriptor.description || ''}}
         </p>
 

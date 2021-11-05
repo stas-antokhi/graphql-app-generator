@@ -16,7 +16,10 @@ export class GraphqlAppsComponent implements OnInit {
   constructor(private graphqlSvc: GraphqlAppsService) { }
 
   ngOnInit(): void {
-    this.graphqlSvc.getAllApps().subscribe(apps => this.apps$.next(apps));
+    this.graphqlSvc.getAllApps().subscribe(
+      apps => this.apps$.next(apps),
+      err => console.error('Error while trying to fetch apps', err)
+    );
   }
 
   deleteApp(data: { $oid: string}) {
