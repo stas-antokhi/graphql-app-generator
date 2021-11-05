@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit{
   showSideNav: boolean = false;
-  title = 'GraphQL app generator';
+  title = 'GraphQL app manager';
 
   constructor(private breakpoint: BreakpointObserver) {}
 

@@ -1,4 +1,4 @@
-# GraphqQL app generator
+# GraphqQL app manager
 ### Manage your RESTHeart GraphQL apps in one place.
 
 
