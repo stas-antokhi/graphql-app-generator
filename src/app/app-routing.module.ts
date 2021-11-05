@@ -5,6 +5,8 @@ import { GraphqlCreateComponent } from './components/graphql-apps/graphql-create
 import { GraphqlEditComponent } from './components/graphql-apps/graphql-edit/graphql-edit.component';
 import { GraphqlAppComponent } from './components/graphql/graphql-app/graphql-app.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
+import { HasCredentialsGuard } from './core/guards/has-credentials.guard';
+import { ResthearCredentialsComponent } from './shared/components/resthear-credentials/resthear-credentials.component';
 
 const routes: Routes = [
   {
@@ -13,6 +15,7 @@ const routes: Routes = [
   },
   {
     path: 'apps',
+    canActivate: [HasCredentialsGuard],
     children: [
       {
         path: '',
@@ -31,6 +34,10 @@ const routes: Routes = [
         component: GraphqlAppComponent
       }
     ]
+  },
+  {
+    path: 'credentials',
+    component: ResthearCredentialsComponent
   }
 ];
 

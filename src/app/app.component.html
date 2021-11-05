@@ -1,7 +1,7 @@
 <mat-toolbar color="primary" style="min-height: 80px;">
     <div class="container mx-auto flex justify-between">
 
-      <p class="pb-0 mb-0 text-xl font-bold"> {{ title }} </p>
+      <a [routerLink]="['/']" class="pb-0 mb-0 text-xl font-bold cursor-pointer"> {{ title }} </a>
 
       <app-nav *ngIf="!showSideNav"></app-nav>
 

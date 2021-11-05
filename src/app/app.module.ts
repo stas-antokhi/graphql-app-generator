@@ -16,7 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { MatCardModule } from '@angular/material/card';
 import { AppCardComponent } from './components/graphql-apps/gql-app-card/app-card.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatStepperModule } from '@angular/material/stepper';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -41,6 +41,8 @@ import { GraphqlCreateComponent } from './components/graphql-apps/graphql-create
 import { GraphqlEditComponent } from './components/graphql-apps/graphql-edit/graphql-edit.component';
 import { ConfirmActionDialogComponent } from './shared/components/confirm-action-dialog/confirm-action-dialog.component';
 import { PageHeaderComponent } from './shared/components/page-header/page-header.component';
+import { ResthearCredentialsComponent } from './shared/components/resthear-credentials/resthear-credentials.component';
+import { AuthTokenInterceptorService } from './core/services/auth-token-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -60,6 +62,7 @@ import { PageHeaderComponent } from './shared/components/page-header/page-header
     GraphqlEditComponent,
     ConfirmActionDialogComponent,
     PageHeaderComponent,
+    ResthearCredentialsComponent,
   ],
   imports: [
     FormsModule,
@@ -86,7 +89,13 @@ import { PageHeaderComponent } from './shared/components/page-header/page-header
     MonacoEditorModule.forRoot(monacoConfig),
   ],
   entryComponents: [SchemaParseErrorDialog, MappingsErrorDialog],
-  providers: [],
+  providers: [
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: AuthTokenInterceptorService,
+    //   multi: true
+    // }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
