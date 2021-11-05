@@ -2,45 +2,49 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Graphql } from 'src/app/shared/models/GraphQLApp';
+import { CredentialsService } from './credentials.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GraphqlAppsService {
 
-  private mockURL = 'http://localhost:8080/gql-apps';
-  private headers = {'Authorization': 'Basic ' + btoa('admin:secret')}
+  private rhURL = '';
+  private headers: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private credentialSvc: CredentialsService) {
+    const {url, username, password} = this.credentialSvc.getCredentials();
+
+    this.rhURL = url;
+    this.headers = {'Authorization': 'Basic ' + btoa(`${username}:${password}`)}
+  }
 
   getAllApps(): Observable<Graphql.App[]> {
-    return this.http.get<Graphql.App[]>(this.mockURL, { headers: this.headers});
+    return this.http.get<Graphql.App[]>(this.rhURL, {headers: this.headers});
   }
 
   createApp(data: Graphql.App): Observable<HttpResponse<any>> {
-    return this.http.post(this.mockURL, data, {
+    return this.http.post(this.rhURL, data, {
       observe: 'response',
       headers: this.headers
     });
   }
 
   deleteApp(id: string): Observable<HttpResponse<any>> {
-    return this.http.delete(`${this.mockURL}/${id}`, {
+    return this.http.delete(`${this.rhURL}/${id}`, {
       observe: 'response',
       headers: this.headers
     })
   }
 
   getAppById(id: string): Observable<Graphql.App> {
-    return this.http.get<Graphql.App>(`${this.mockURL}/${id}`, {
-      headers: this.headers
-    });
+    return this.http.get<Graphql.App>(`${this.rhURL}/${id}`, {headers: this.headers});
   }
 
   updateAppById(app: Graphql.App, id: string): Observable<HttpResponse<any>> {
-    return this.http.put(`${this.mockURL}/${id}`, app, {
-      headers: this.headers,
-      observe: 'response'
+    return this.http.put(`${this.rhURL}/${id}`, app, {
+      observe: 'response',
+      headers: this.headers
     });
   }
 }
